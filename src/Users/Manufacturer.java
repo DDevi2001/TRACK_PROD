@@ -11,7 +11,7 @@ public class Manufacturer extends User {
     ManufacturerController manufacturerController;
     public Manufacturer(String id, String role) {
         super(id, role);
-        this.manufacturerController = ControllerFactory.getController(ManufacturerController.class, this.getClass());
+        this.manufacturerController = ControllerFactory.getController(ManufacturerController.class);
     }
 
 //    public void setManufacturerController(ManufacturerController manufacturerController) {

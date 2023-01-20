@@ -1,6 +1,5 @@
 package ui;
 
-import datas.controllers.ManufacturerController;
 import helper.InputVerification;
 import helper.Utils;
 import model.Inventory;
@@ -11,7 +10,7 @@ import ui.functions.ManufacturerFunctions;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ManufacturerUI implements UIManagable{
+public class ManufacturerUI implements UIManagable {
     Manufacturer manufacturer;
 
     public ManufacturerUI(Manufacturer manufacturer) {
@@ -31,9 +30,9 @@ public class ManufacturerUI implements UIManagable{
                 case ADD_MANUFACTURED_PRODUCTS:
                     main1:
                     while (true) {
-                        System.out.println("1. New product" +
-                                "\n2. Existing Product" +
-                                "\n3. Go back");
+                        System.out.println("1. NEW PRODUCT" +
+                                "\n2. EXISTING PRODUCT" +
+                                "\n3. GO BACK");
                         String option = InputVerification.getOption(3);
                         switch (option) {
                             case "1":
@@ -56,56 +55,54 @@ public class ManufacturerUI implements UIManagable{
     void printInventoryRequirements() {
         HashMap<String, Integer> tempList = manufacturer.returnRequirementList();
         if (tempList.isEmpty()) {
-            System.out.println("There is no requirement so far");
-        } else {
-            for (Map.Entry<String, Integer> requirements : tempList.entrySet()) {
-                System.out.println(requirements.getKey() + " : " + requirements.getValue());
-            }
+            System.out.println("No requirement so far");
+            return;
+        }
+        for (Map.Entry<String, Integer> requirements : tempList.entrySet()) {
+            System.out.println(requirements.getKey() + " : " + requirements.getValue());
         }
     }
 
     public void manufactureProduct() {
-        if (isEmpty()) {
+        if (manufacturer.isEmpty()) {
             System.out.println("No products in inventory. Create a new one to start your journey.");
-        } else {
-            HashMap<String, Integer> tempReqList = manufacturer.returnRequirementList();
-
-            String check = "1";
-            while (check.equals("1")) {
-                String productID;
-                while (true) {
-                    System.out.print("Enter the product ID: ");
-                    productID = InputVerification.isID();
-                    if (containsProduct(productID)) {
-                        break;
-                    }
-                    System.out.println("ID not found");
-                }
-
-                int quantity;
-                while (true) {
-                    System.out.println("Enter the quantity: ");
-                    quantity = InputVerification.getInt();
-                    if (tempReqList.containsKey(productID)) {
-                        if ((quantity < tempReqList.get(productID)) || (quantity > (tempReqList.get(productID) + 100))) {
-                            System.out.println("Provide optimum quantity");
-                            continue;
-                        }
-                    } else {
-                        if ((quantity < 10) || (quantity > 10000)) {
-                            System.out.println("Provide optimum quantity");
-                            continue;
-                        }
-                    }
-
+            return;
+        }
+        HashMap<String, Integer> tempReqList = manufacturer.returnRequirementList();
+        String check = "1";
+        while (check.equals("1")) {
+            String productID;
+            while (true) {
+                System.out.print("Enter the product ID: ");
+                productID = InputVerification.getID();
+                if (manufacturer.containsProduct(productID)) {
                     break;
                 }
-
-                sendNewManufacturedProducts(productID, quantity);
-
-                System.out.println("If you still want to add new products enter 1 or enter 2 to exit");
-                check = InputVerification.getOption(2);
+                System.out.println("ID not found");
             }
+
+            int quantity;
+            while (true) {
+                System.out.println("Enter the quantity: ");
+                quantity = InputVerification.getInt();
+                if (tempReqList.containsKey(productID)) {
+                    if ((quantity < tempReqList.get(productID)) || (quantity > (tempReqList.get(productID) + 100))) {
+                        System.out.println("Provide optimum quantity");
+                        continue;
+                    }
+                } else {
+                    if ((quantity < 10) || (quantity > 10000)) {
+                        System.out.println("Provide optimum quantity");
+                        continue;
+                    }
+                }
+                break;
+            }
+
+            manufacturer.sendNewManufacturedProducts(productID, quantity);
+
+            System.out.println("If you still want to add new products enter 1 or enter 2 to exit");
+            check = InputVerification.getOption(2);
         }
     }
 
@@ -115,7 +112,7 @@ public class ManufacturerUI implements UIManagable{
             //Get new product name
             System.out.print("Enter the name of new product to be added: ");
             String newProduct = InputVerification.getString();
-            if (containsProduct(newProduct)) {
+            if (manufacturer.containsProduct(newProduct)) {
                 System.out.println("The product is already in manufacturing. " +
                         "Please try to add a new product");
                 continue;
@@ -160,30 +157,10 @@ public class ManufacturerUI implements UIManagable{
 
             Product product = new Product(newProduct, newProductID, productWeight, manufacturingCost);
             Inventory inventory = new Inventory(product, quantity);
-            sendNewManufacturedProducts(newProductID, inventory);
+            manufacturer.sendNewManufacturedProducts(newProductID, inventory);
 
             System.out.println("If you still want to add new products enter 1 or enter 2 to exit");
             check = InputVerification.getOption(2);
         }
-    }
-
-    void sendNewManufacturedProducts(String productID, Inventory products) {
-        manufacturer.sendNewManufacturedProducts(productID, products);
-    }
-
-    void sendNewManufacturedProducts(String productID, Integer quantity) {
-        manufacturer.sendNewManufacturedProducts(productID, quantity);
-    }
-
-    boolean containsProduct(String productNameOrID) {
-        return manufacturer.containsProduct(productNameOrID);
-    }
-
-//    public void receiveManufacturerController(ManufacturerController manufacturerController) {
-//        manufacturer.setManufacturerController(manufacturerController);
-//    }
-
-    boolean isEmpty() {
-        return manufacturer.isEmpty();
     }
 }

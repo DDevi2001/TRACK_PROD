@@ -10,7 +10,8 @@ public class Utils {
     private static int order_no = 0;
 
     public static void printOptions(Enum[] array) {
-        for (int i = 0; i < array.length; i++) {
+        System.out.println();
+        for(int i = 0; i < array.length; i++) {
             System.out.println((i+1)+". "+array[i]);
         }
     }

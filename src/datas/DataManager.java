@@ -138,6 +138,11 @@ class DataManager implements AdminController, InventoryController, CustomerContr
     }
 
     @Override
+    public boolean isRequestPresent(String id) {
+        return (db.getQuotationRequests().containsKey(id) || db.getOrdersData().containsKey(id));
+    }
+
+    @Override
     public HashMap<String, Integer> getRequirementList() {
         return db.getRequirementList();
     }

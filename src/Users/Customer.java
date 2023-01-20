@@ -5,7 +5,6 @@ import datas.controllers.CustomerController;
 import model.Invoice;
 import model.Quotation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Customer extends User{
@@ -14,7 +13,7 @@ public class Customer extends User{
 
     public Customer (String id, String role) {
         super(id, role);
-        this.customerController = ControllerFactory.getController(CustomerController.class, this.getClass());
+        this.customerController = ControllerFactory.getController(CustomerController.class);
     }
 
 //    public void setCustomerController(CustomerController customerController) {
@@ -40,5 +39,9 @@ public class Customer extends User{
 
     public Invoice getInvoice() {
         return customerController.getInvoice(getId());
+    }
+
+    public boolean isRequestPresent() {
+        return customerController.isRequestPresent(getId());
     }
 }

@@ -10,7 +10,7 @@ public class SalesHead extends User {
     SalesController salesController;
     public SalesHead(String id, String role) {
         super(id, role);
-        this.salesController = ControllerFactory.getController(SalesController.class, this.getClass());
+        this.salesController = ControllerFactory.getController(SalesController.class);
     }
 
 //    public void setSalesController(SalesController salesController) {

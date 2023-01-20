@@ -15,4 +15,6 @@ public interface CustomerController {
     void cancelQuotation(String id);
 
     Invoice getInvoice(String id);
+
+    boolean isRequestPresent(String id);
 }

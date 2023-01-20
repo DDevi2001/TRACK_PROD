@@ -1,6 +1,6 @@
 package main;
 
-import datas.ApplicationUI;
+import ui.ApplicationUI;
 import helper.InputVerification;
 import helper.Utils;
 
@@ -9,7 +9,7 @@ public class MainApp {
         ApplicationUI applicationUI = new ApplicationUI();
         main:
         while (true) {
-            System.out.println("Welcome to Track_Prod");
+            System.out.println("WELCOME TO TRACK-PROD");
             MainFunctions[] mainFunctions = MainFunctions.values();
             Utils.printOptions(mainFunctions);
             MainFunctions preference = mainFunctions[Integer.parseInt(InputVerification.getOption(mainFunctions.length)) - 1];
@@ -26,5 +26,3 @@ public class MainApp {
         }
     }
 }
-
-//Hello

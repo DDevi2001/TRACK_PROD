@@ -12,7 +12,7 @@ public class InventoryManager extends User {
     InventoryController inventoryController ;
     public InventoryManager(String id, String role) {
         super(id, role);
-        this.inventoryController = ControllerFactory.getController(InventoryController.class, this.getClass());
+        this.inventoryController = ControllerFactory.getController(InventoryController.class);
     }
 
 //    public void setInventoryController(){

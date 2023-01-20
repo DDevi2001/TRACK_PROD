@@ -116,13 +116,15 @@ final class Database {
 
     boolean processOrder(String ID, Order order) {
         for (IndividualDetails temp : order.getDetails()) {
-            if (!((inventoryData.get(temp.getProductID()).getQuantity() - temp.getQuantity()) < 0)) {
-                inventoryData.get(temp.getProductID()).subQuantity(temp.getQuantity());
-                invoiceData.get(ID).setStatus(true);
-            } else {
+            if (((inventoryData.get(temp.getProductID()).getQuantity() - temp.getQuantity()) < 0)) {
                 return false;
             }
         }
+        for (IndividualDetails temp : order.getDetails()) {
+            inventoryData.get(temp.getProductID()).subQuantity(temp.getQuantity());
+        }
+        invoiceData.get(ID).setStatus(true);
+        ordersData.remove(ID);
         return true;
     }
 
@@ -155,7 +157,6 @@ final class Database {
             }
         }
         ordersData.put(id, order);
-
     }
 
     public boolean checkFor(String productNameOrID) {
@@ -177,8 +178,7 @@ final class Database {
 
     public void addToInvoice(String customerID, Order order) {
         Invoice invoice = new Invoice();
-        String orderID = Utils.generateID("Order");
-        invoice.setOrderID(orderID);
+        invoice.setOrderID(Utils.generateID("Order"));
         invoice.setOrder(order);
         invoiceData.put(customerID, invoice);
     }
