@@ -37,33 +37,47 @@ public class SalesHeadUI implements UIManagable {
     }
 
     void invoiceProcess() {
-        HashMap<String, Order> tempList = salesHead.getOrdersDetails();
+        HashMap<String, HashMap<String, Order>> tempList = salesHead.getOrdersDetails();
         if (tempList.size() == 0) {
             System.out.println("No orders so far");
             return;
         }
-        System.out.println("Choose one to proceed");
-        int i = 1;
-        for (String ID : tempList.keySet()) {
-            System.out.println(i++ + ". " + ID);
-        }
-        while (true) {
+        String check = "1";
+        while (check.equals("1")) {
+            System.out.println("Choose one to proceed");
+            int i = 1;
+            for (String ID : tempList.keySet()) {
+                System.out.println(i++ + ". " + ID);
+            }
+            String ID;
+            while (true) {
+                System.out.print("Enter the ID: ");
+                ID = InputVerification.getID();
+                if (tempList.containsKey(ID)) {
+                    break;
+                }
+                System.out.println("No such ID found");
+            }
+            int ii = 1;
+            for (String orderID : tempList.get(ID).keySet()) {
+                System.out.println(ii++ + ". " + orderID);
+            }
             System.out.println("Enter the ID: ");
-            String ID = InputVerification.getID();
-            if (!tempList.containsKey(ID)) {
+            String orderID = InputVerification.getID();
+            if (!tempList.get(ID).containsKey(orderID)) {
                 System.out.println("No such ID found");
                 continue;
             }
             System.out.println("Order Details:");
-            System.out.println("CUSTOMER ID : " + ID +
-                    "\nORDER :");
-            for (IndividualDetails temp : tempList.get(ID).getDetails()) {
+            for (IndividualDetails temp : tempList.get(ID).get(orderID).getDetails()) {
                 System.out.println(temp.getProductID() + " - " + temp.getQuantity());
             }
-            salesHead.processInvoice(ID, tempList.get(ID));
-            break;
+            salesHead.processInvoice(ID, orderID, tempList.get(ID).get(orderID));
+            System.out.println("Successfully Processed");
+
+            System.out.println("enter 1 to continue or enter 2 to exit");
+            check = InputVerification.getOption(2);
         }
-        System.out.println("Successfully Processed");
     }
 
     void quotationProcess() {

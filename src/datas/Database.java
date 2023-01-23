@@ -13,10 +13,10 @@ final class Database {
     private final HashMap<String, Inventory> inventoryData = new HashMap<>();
     private final HashMap<String, Integer> requirementList = new HashMap<>();
     private final HashMap<String, Inventory> manufacturedProductsList = new HashMap<>();
-    private final HashMap<String, Order> ordersData = new HashMap<>();
+    private final HashMap<String, HashMap<String, Order>> ordersData = new HashMap<>();
     private final HashMap<String, HashMap<String, Integer>> quotationRequests = new HashMap<>();
     private final HashMap<String, Quotation> quotationData = new HashMap<>();
-    private final HashMap<String, Invoice> invoiceData = new HashMap<>();
+    private final HashMap<String, HashMap<String, Invoice>> invoiceData = new HashMap<>();
 
     private Database() {
     }
@@ -42,7 +42,7 @@ final class Database {
         return usersData;
     }
 
-    HashMap<String, Order> getOrdersData() {
+    HashMap<String, HashMap<String, Order>> getOrdersData() {
         return ordersData;
     }
 
@@ -58,7 +58,7 @@ final class Database {
         return quotationData;
     }
 
-    HashMap<String, Invoice> getInvoiceData() {
+    HashMap<String, HashMap<String, Invoice>> getInvoiceData() {
         return invoiceData;
     }
 
@@ -114,7 +114,7 @@ final class Database {
         }
     }
 
-    boolean processOrder(String ID, Order order) {
+    boolean processOrder(String ID, String orderID, Order order) {
         for (IndividualDetails temp : order.getDetails()) {
             if (((inventoryData.get(temp.getProductID()).getQuantity() - temp.getQuantity()) < 0)) {
                 return false;
@@ -123,8 +123,7 @@ final class Database {
         for (IndividualDetails temp : order.getDetails()) {
             inventoryData.get(temp.getProductID()).subQuantity(temp.getQuantity());
         }
-        invoiceData.get(ID).setStatus(true);
-        ordersData.remove(ID);
+        invoiceData.get(ID).get(orderID).setStatus(true);
         return true;
     }
 
@@ -150,13 +149,18 @@ final class Database {
 
     public void confirmOrder(String id) {
         Order order = new Order(id);
+        order.setOrderID(Utils.generateID("Order"));
         ArrayList<IndividualDetails> tempList = quotationData.remove(id).getIndividualDetails();
         for (IndividualDetails temp : tempList) {
             if (temp.getStatus().equals(AvailabilityStatus.AVAILABLE)) {
                 order.addToOrder(temp);
             }
         }
-        ordersData.put(id, order);
+        if(!ordersData.containsKey(id)) {
+            ordersData.put(id, new HashMap<>());
+        }
+        ordersData.get(id).put(order.getOrderID(), order);
+        quotationRequests.remove(id);
     }
 
     public boolean checkFor(String productNameOrID) {
@@ -176,10 +180,13 @@ final class Database {
         return false;
     }
 
-    public void addToInvoice(String customerID, Order order) {
+    public void addToInvoice(String customerID, String orderID, Order order) {
         Invoice invoice = new Invoice();
-        invoice.setOrderID(Utils.generateID("Order"));
         invoice.setOrder(order);
-        invoiceData.put(customerID, invoice);
+        if (!invoiceData.containsKey(customerID)) {
+            invoiceData.put(customerID, new HashMap<>());
+        }
+        invoiceData.get(customerID).put(orderID, invoice);
+        ordersData.get(customerID).remove(orderID);
     }
 }

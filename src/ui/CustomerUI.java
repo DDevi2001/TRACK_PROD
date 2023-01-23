@@ -49,7 +49,7 @@ public class CustomerUI implements UIManagable {
             return;
         }
 
-        if ((customer.getQuotation() != null) && (customer.isRequestPresent())) {
+        if (customer.isRequestPresent()) {
             System.out.println("You have already posted an request. Kindly wait until the entire process gets complete.");
             return;
         }
@@ -95,12 +95,11 @@ public class CustomerUI implements UIManagable {
     void viewQuotation() {
         Quotation quotation = customer.getQuotation();
 
-        if (quotation == null) {
+        if (!customer.isRequestPresent()) {
             System.out.println("Yet to start your journey...");
             return;
         }
-
-        if (quotation.getIndividualDetails().isEmpty()) {
+        if (quotation == null) {
             System.out.println("Your quotation is yet to be processed");
             return;
         }
@@ -127,34 +126,49 @@ public class CustomerUI implements UIManagable {
     }
 
     void viewInvoice() {
-        if (!customer.isRequestPresent()) {
+        if (!customer.isOrderPresent()) {
             System.out.println("You haven't placed any orders");
             return;
         }
-        Invoice invoice = customer.getInvoice();
+        HashMap<String, Invoice> invoice = customer.getInvoice();
         if (invoice == null) {
             System.out.println("Your order is yet to be confirmed from our side");
             return;
         }
+        String check = "1";
+        while (check.equals("1")) {
+            int i = 1;
+            for (Invoice invoiceList : invoice.values()) {
+                System.out.println(i++ + ". " + invoiceList.getOrder().getOrderID());
+            }
+            System.out.println("Enter the ID: ");
+            String ID = InputVerification.getID();
+            if (!invoice.containsKey(ID)) {
+                System.out.println("No such ID found");
+                continue;
+            }
+            System.out.println("ORDER ID : " + invoice.get(ID));
+            if (invoice.get(ID).isStatus()) {
+                System.out.println("STATUS : Processing started");
+            } else {
+                System.out.println("STATUS : Yet to process");
+            }
+            Formatter fmt = new Formatter();
+            fmt.format("__________________________________________________________________________________________________________________________________________");
+            fmt.format("\n%1s %25s %25s %25s\n", "PRODUCT ID", "PRODUCT NAME", "QUANTITY REQUESTED", "COST OF THE PRODUCT");
+            fmt.format("__________________________________________________________________________________________________________________________________________");
+            float totalCost = 0;
+            for (IndividualDetails temp : invoice.get(ID).getOrder().getDetails()) {
+                fmt.format("\n%4s %25s %25s %25s\n", temp.getProductID(), temp.getProductName(), temp.getQuantity(), temp.getCost());
+                totalCost += temp.getCost();
+            }
+            fmt.format("__________________________________________________________________________________________________________________________________________");
+            fmt.format("\n%60s %25s\n", "TOTAL COST", totalCost);
+            fmt.format("__________________________________________________________________________________________________________________________________________");
+            System.out.println(fmt);
 
-        System.out.println("ORDER ID : " + invoice.getOrderID());
-        if (invoice.isStatus()) {
-            System.out.println("STATUS : Processing started");
-        } else {
-            System.out.println("STATUS : Yet to process");
+            System.out.println("enter 1 to continue or enter 2 to exit");
+            check = InputVerification.getOption(2);
         }
-        Formatter fmt = new Formatter();
-        fmt.format("__________________________________________________________________________________________________________________________________________");
-        fmt.format("\n%1s %25s %25s %25s\n", "PRODUCT ID", "PRODUCT NAME", "QUANTITY REQUESTED", "COST OF THE PRODUCT");
-        fmt.format("__________________________________________________________________________________________________________________________________________");
-        float totalCost = 0;
-        for (IndividualDetails temp : invoice.getOrder().getDetails()) {
-            fmt.format("\n%4s %25s %25s %25s\n", temp.getProductID(), temp.getProductName(), temp.getQuantity(), temp.getCost());
-            totalCost += temp.getCost();
-        }
-        fmt.format("__________________________________________________________________________________________________________________________________________");
-        fmt.format("\n%60s %25s\n", "TOTAL COST", totalCost);
-        fmt.format("__________________________________________________________________________________________________________________________________________");
-        System.out.println(fmt);
     }
 }

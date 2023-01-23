@@ -13,10 +13,6 @@ public class Manufacturer extends User {
         super(id, role);
         this.manufacturerController = ControllerFactory.getController(ManufacturerController.class);
     }
-
-    public HashMap<String, String> getProductsDetails() {
-        return manufacturerController.provideProductDetails();
-    }
     public boolean containsProduct(String productNameOrID) {
         return manufacturerController.checkExistenceOf(productNameOrID);
     }

@@ -32,11 +32,11 @@ public class SalesHead extends User {
 //        return quotation;
 //    }
 
-    public HashMap<String, Order> getOrdersDetails() {
+    public HashMap<String, HashMap<String, Order>> getOrdersDetails() {
         return salesController.getOrdersDetails();
     }
 
-    public void processInvoice(String id, Order order) {
-        salesController.processInvoice(id, order);
+    public void processInvoice(String id, String orderID, Order order) {
+        salesController.processInvoice(id, orderID, order);
     }
 }

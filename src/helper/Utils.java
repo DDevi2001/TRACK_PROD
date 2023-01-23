@@ -23,7 +23,7 @@ public class Utils {
             case "Product":
                 return String.format("PRD%04d",++product_no);
             case "Order":
-                return String.format(LocalDate.now().toString().substring(0,4)+"ORD%05d",order_no);
+                return String.format("ORD%04d",++order_no);
         }
         return id;
     }

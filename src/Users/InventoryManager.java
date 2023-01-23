@@ -3,6 +3,7 @@ package Users;
 import datas.ControllerFactory;
 import datas.controllers.InventoryController;
 import model.Inventory;
+import model.Invoice;
 import model.Order;
 
 import java.util.HashMap;
@@ -31,11 +32,11 @@ public class InventoryManager extends User {
         inventoryController.addToRequirementList(requirementProposal);
     }
 
-    public HashMap<String, Order> getOrdersDetails() {
-        return inventoryController.getOrdersDetails();
+    public boolean processOrder(String ID, String orderID, Order order) {
+        return inventoryController.processOrder(ID, orderID, order);
     }
 
-    public boolean processOrder(String ID, Order order) {
-        return inventoryController.processOrder(ID, order);
+    public HashMap<String, HashMap<String, Invoice>> getInvoiceDetails() {
+        return inventoryController.getInvoiceDetails();
     }
 }

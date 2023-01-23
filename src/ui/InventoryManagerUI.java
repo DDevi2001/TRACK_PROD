@@ -5,6 +5,7 @@ import helper.Utils;
 import model.IndividualDetails;
 import model.Inventory;
 import Users.InventoryManager;
+import model.Invoice;
 import model.Order;
 import ui.functions.InventoryFunctions;
 
@@ -58,6 +59,7 @@ public class InventoryManagerUI implements UIManagable {
 
         if (!InputVerification.yesOrNoCheck()) {
             inventoryManager.addProductsToInventory(tempList);
+            System.out.println("Successfully added to the inventory");
             return;
         }
 
@@ -69,7 +71,6 @@ public class InventoryManagerUI implements UIManagable {
                 System.out.println("No such ID found. Please enter the correct ID");
                 continue;
             }
-
             System.out.print("DO YOU WANT TO REMOVE ALL [y/n] -> ");
             if (InputVerification.yesOrNoCheck()) {
                 tempList.remove(productID);
@@ -90,44 +91,64 @@ public class InventoryManagerUI implements UIManagable {
                 continue;
             }
             inventoryManager.addProductsToInventory(tempList);
-            System.out.println("Successfully added to the Inventory");
+            System.out.println("Successfully added to the inventory");
             break;
         }
     }
 
     void processOrders() {
-        HashMap<String, Order> tempList = inventoryManager.getOrdersDetails();
+        HashMap<String, HashMap<String, Invoice>> tempList = inventoryManager.getInvoiceDetails();
         if (tempList.isEmpty()) {
             System.out.println("No orders yet");
             return;
         }
-        System.out.println("Orders to be processed");
-        int i = 1;
-        for (String ID : tempList.keySet()) {
-            System.out.println(i++ + ". " + ID);
-        }
-        while (true) {
-            System.out.println("ORDER ID : ");
-            String ID = InputVerification.getID();
-            if (tempList.containsKey(ID)) {
-                System.out.println("ORDER DETAILS:" +
-                        "\nCUSTOMER ID : " + tempList.get(ID).getCustomerID() +
-                        "\nORDER       : ");
-                for (IndividualDetails temp : tempList.get(ID).getDetails()) {
-                    System.out.println(temp.getProductID() + " - " + temp.getQuantity());
+        String check = "1";
+        while (check.equals("1")) {
+            System.out.println("Orders to be processed");
+            int i = 1;
+            for (String ID : tempList.keySet()) {
+                System.out.println(i++ + ". " + ID);
+            }
+            String ID;
+            while (true) {
+                System.out.println("Enter the ID: ");
+                ID = InputVerification.getID();
+                if (tempList.containsKey(ID)) {
+                    break;
                 }
-            } else {
-                System.out.println("No such ID exist");
+                System.out.println("No such ID found");
+            }
+            int ii = 1;
+            for (String orderID : tempList.get(ID).keySet()) {
+                System.out.println(ii++ + ". " + orderID);
+            }
+            System.out.println("Enter the ID: ");
+            String orderID = InputVerification.getID();
+            if (!tempList.get(ID).containsKey(orderID)) {
+                System.out.println("No such ID found");
                 continue;
             }
+            System.out.println("ORDER DETAILS:" +
+                    "\nCUSTOMER ID : " + tempList.get(ID) +
+                    "\nORDER       : ");
+            for (IndividualDetails temp : tempList.get(ID).get(orderID).getOrder().getDetails()) {
+                System.out.println(temp.getProductID() + " - " + temp.getQuantity());
+            }
+
+            if (tempList.get(ID).get(orderID).isStatus()) {
+                System.out.println("This order has already been processed");
+                continue;
+            }
+
             System.out.println("DO YOU WANT TO INITIATE THE PROCESS [y/n] -> ");
             if (InputVerification.yesOrNoCheck()) {
-                if (inventoryManager.processOrder(ID, tempList.get(ID))) {
-                    tempList.remove(ID);
+                if (inventoryManager.processOrder(ID, orderID, tempList.get(ID).get(orderID).getOrder())) {
                     break;
                 }
                 System.out.println("Quantity is insufficient in storage. Wait for the manufacturers to complete the production");
             }
+            System.out.println("enter 1 to continue or enter 2 to exit");
+            check = InputVerification.getOption(2);
         }
     }
 

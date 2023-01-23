@@ -33,11 +33,15 @@ public class Customer extends User{
         customerController.cancelQuotation(getId());
     }
 
-    public Invoice getInvoice() {
+    public HashMap<String, Invoice> getInvoice() {
         return customerController.getInvoice(getId());
     }
 
     public boolean isRequestPresent() {
         return customerController.isRequestPresent(getId());
+    }
+
+    public boolean isOrderPresent() {
+        return customerController.isOrderPresent(getId());
     }
 }

@@ -14,7 +14,9 @@ public interface CustomerController {
 
     void cancelQuotation(String id);
 
-    Invoice getInvoice(String id);
+    HashMap<String, Invoice> getInvoice(String id);
 
     boolean isRequestPresent(String id);
+
+    boolean isOrderPresent(String id);
 }

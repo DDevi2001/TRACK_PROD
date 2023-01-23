@@ -51,13 +51,18 @@ class DataManager implements AdminController, InventoryController, CustomerContr
     }
 
     @Override
-    public HashMap<String, Order> getOrdersDetails() {
+    public HashMap<String, HashMap<String, Order>> getOrdersDetails() {
         return db.getOrdersData();
     }
 
     @Override
-    public boolean processOrder(String ID, Order order) {
-        return db.processOrder(ID, order);
+    public boolean processOrder(String ID, String orderID, Order order) {
+        return db.processOrder(ID, orderID, order);
+    }
+
+    @Override
+    public HashMap<String, HashMap<String, Invoice>> getInvoiceDetails() {
+        return db.getInvoiceData();
     }
 
     @Override
@@ -72,8 +77,8 @@ class DataManager implements AdminController, InventoryController, CustomerContr
     }
 
     @Override
-    public void processInvoice(String customerID, Order order) {
-        db.addToInvoice(customerID, order);
+    public void processInvoice(String customerID, String orderID, Order order) {
+        db.addToInvoice(customerID, orderID, order);
     }
 
     AvailabilityStatus availabilityCheck(String productID, int quantity) {
@@ -130,16 +135,22 @@ class DataManager implements AdminController, InventoryController, CustomerContr
     @Override
     public void cancelQuotation(String id) {
         db.getQuotationData().remove(id);
+        db.getQuotationRequests().remove(id);
     }
 
     @Override
-    public Invoice getInvoice(String id) {
+    public HashMap<String, Invoice> getInvoice(String id) {
         return db.getInvoiceData().get(id);
     }
 
     @Override
     public boolean isRequestPresent(String id) {
-        return (db.getQuotationRequests().containsKey(id) || db.getOrdersData().containsKey(id));
+        return db.getQuotationRequests().containsKey(id);
+    }
+
+    @Override
+    public boolean isOrderPresent(String id) {
+        return db.getOrdersData().containsKey(id);
     }
 
     @Override
