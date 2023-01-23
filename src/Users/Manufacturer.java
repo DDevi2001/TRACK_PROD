@@ -14,9 +14,6 @@ public class Manufacturer extends User {
         this.manufacturerController = ControllerFactory.getController(ManufacturerController.class);
     }
 
-//    public void setManufacturerController(ManufacturerController manufacturerController) {
-//        this.manufacturerController = manufacturerController;
-//    }
     public HashMap<String, String> getProductsDetails() {
         return manufacturerController.provideProductDetails();
     }

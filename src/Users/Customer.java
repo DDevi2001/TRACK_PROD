@@ -15,12 +15,8 @@ public class Customer extends User{
         super(id, role);
         this.customerController = ControllerFactory.getController(CustomerController.class);
     }
-
-//    public void setCustomerController(CustomerController customerController) {
-//        this.customerController = customerController;
-//    }
     public HashMap<String, String> getProductDetails() {
-        return customerController.provideProductDetails();
+        return customerController.getProductDetails();
     }
     public void requestQuotation(HashMap<String, Integer> quotationRequest) {
         customerController.requestQuotation(quotationRequest, getId());

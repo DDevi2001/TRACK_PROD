@@ -103,7 +103,7 @@ class DataManager implements AdminController, InventoryController, CustomerContr
     }
 
     @Override
-    public HashMap<String, String> provideProductDetails() {
+    public HashMap<String, String> getProductDetails() {
         HashMap<String, String> productDetails = new HashMap<>();
         HashMap<String, Inventory> tempInvData = db.getInventoryData();
         for (Map.Entry<String, Inventory> inventoryEntry : tempInvData.entrySet()) {

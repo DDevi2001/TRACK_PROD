@@ -13,9 +13,6 @@ public class SalesHead extends User {
         this.salesController = ControllerFactory.getController(SalesController.class);
     }
 
-//    public void setSalesController(SalesController salesController) {
-//        this.salesController = salesController;
-//    }
     public HashMap<String, HashMap<String, Integer>> getQuotationRequests() {
         return salesController.getQuotationRequests();
     }

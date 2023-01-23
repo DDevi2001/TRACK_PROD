@@ -15,10 +15,6 @@ public class InventoryManager extends User {
         this.inventoryController = ControllerFactory.getController(InventoryController.class);
     }
 
-//    public void setInventoryController(){
-//        this.inventoryController = inventoryController;
-//    }
-
     public HashMap<String, Inventory> getManufacturedProductsList() {
         return inventoryController.provideManufacturedProductsList();
     }

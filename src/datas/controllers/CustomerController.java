@@ -6,7 +6,7 @@ import model.Quotation;
 import java.util.HashMap;
 
 public interface CustomerController {
-    HashMap<String, String> provideProductDetails();
+    HashMap<String, String> getProductDetails();
     void requestQuotation(HashMap<String, Integer> quotationRequest, String customerID);
     Quotation getQuotation(String customerID);
 
