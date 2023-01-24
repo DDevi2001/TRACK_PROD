@@ -14,7 +14,7 @@ public class InputVerification {
             if (option.matches("[1-" + length + "]")) {
                 return option;
             }
-            System.out.println("Please enter valid option");
+            System.out.println("ENTER VALID OPTION");
         }
     }
 
@@ -24,7 +24,7 @@ public class InputVerification {
             if (inputS.matches("^[A-Za-z\\s?]*$")) {
                 return inputS;
             }
-            System.out.println("Input should contain only alphabets");
+            System.out.println("INPUT SHOULD CONTAIN ONLY ALPHABETS");
         }
     }
 
@@ -35,7 +35,7 @@ public class InputVerification {
                 double input = Double.parseDouble(inputF);
                 return Float.parseFloat(new DecimalFormat("0.00").format(input));
             } catch (Exception e) {
-                System.out.println("Please enter a integer");
+                System.out.println("ENTER A INTEGER VALUE");
             }
         }
     }
@@ -46,7 +46,7 @@ public class InputVerification {
             try {
                 return Integer.parseInt(inputI);
             } catch (Exception e) {
-                System.out.println("Please enter a integer");
+                System.out.println("ENTER A INTEGER VALUE");
             }
         }
     }
@@ -57,7 +57,7 @@ public class InputVerification {
             if (inputID.matches("(PRD|CUS|ORD|INV|MAN|SAL)[0-9]{4}")) {
                 return inputID;
             }
-            System.out.println("Enter valid ID");
+            System.out.println("INVALID ID");
         }
     }
 
@@ -67,7 +67,7 @@ public class InputVerification {
             if (input.matches("[yYnN]")) {
                 return input.matches("[yY]");
             }
-            System.out.println("Enter valid option");
+            System.out.println("ENTER VALID OPTION");
         }
     }
 }

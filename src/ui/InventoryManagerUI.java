@@ -38,6 +38,7 @@ public class InventoryManagerUI implements UIManagable {
                     proposeRequirement();
                     continue;
                 case EXIT:
+                    System.out.println();
                     break main;
             }
         }
@@ -46,20 +47,18 @@ public class InventoryManagerUI implements UIManagable {
     void addToInventory() {
         HashMap<String, Inventory> tempList = inventoryManager.getManufacturedProductsList();
         if (tempList.isEmpty()) {
-            System.out.println("No products have manufactured recently");
+            System.out.println("\nNO PRODUCTS TO ADD");
             return;
         }
-
-        System.out.println("Below displayed are the products and their quantity to be added in the Inventory");
         for (Map.Entry<String, Inventory> map : tempList.entrySet()) {
-            System.out.println(map.getKey() + " : " + map.getValue().getProduct().getProductName() + " -> " + map.getValue().getQuantity());
+            System.out.println("\n" + map.getKey() + " : " + map.getValue().getProduct().getProductName() + " -> " + map.getValue().getQuantity());
         }
 
-        System.out.print("DO YOU REMOVE ANY PRODUCTS [y/n] -> ");
+        System.out.print("\nDO YOU REMOVE ANY PRODUCTS [y/n] -> ");
 
         if (!InputVerification.yesOrNoCheck()) {
             inventoryManager.addProductsToInventory(tempList);
-            System.out.println("Successfully added to the inventory");
+            System.out.println("\nSUCCESSFULLY ADDED TO THE INVENTORY");
             return;
         }
 
@@ -68,30 +67,30 @@ public class InventoryManagerUI implements UIManagable {
             System.out.print("PRODUCT ID : ");
             productID = InputVerification.getID();
             if (!tempList.containsKey(productID)) {
-                System.out.println("No such ID found. Please enter the correct ID");
+                System.out.println("ID NOT FOUND");
                 continue;
             }
-            System.out.print("DO YOU WANT TO REMOVE ALL [y/n] -> ");
+            System.out.print("\nDO YOU WANT TO REMOVE ALL [y/n] -> ");
             if (InputVerification.yesOrNoCheck()) {
                 tempList.remove(productID);
             } else {
-                System.out.print("Enter the quantity to be removed: ");
+                System.out.print("QUANTITY : ");
                 while (true) {
                     int quantity = InputVerification.getInt();
                     if ((quantity < tempList.get(productID).getQuantity()) && (quantity > 0)) {
                         tempList.get(productID).subQuantity(quantity);
                         break;
                     }
-                    System.out.println("Provide valid quantity");
+                    System.out.println("PROVIDE VALID NUMBER");
                 }
             }
 
-            System.out.print("DO YOU WANT TO MAKE ANY OTHER CHANGES [y/n] -> ");
+            System.out.print("\nDO YOU WANT TO MAKE ANY OTHER CHANGES [y/n] -> ");
             if (InputVerification.yesOrNoCheck()) {
                 continue;
             }
             inventoryManager.addProductsToInventory(tempList);
-            System.out.println("Successfully added to the inventory");
+            System.out.println("\nSUCCESSFULLY ADDED TO THE INVENTORY");
             break;
         }
     }
@@ -99,56 +98,51 @@ public class InventoryManagerUI implements UIManagable {
     void processOrders() {
         HashMap<String, HashMap<String, Invoice>> tempList = inventoryManager.getInvoiceDetails();
         if (tempList.isEmpty()) {
-            System.out.println("No orders yet");
+            System.out.println("\nZERO ORDERS");
             return;
         }
-        String check = "1";
-        while (check.equals("1")) {
-            System.out.println("Orders to be processed");
-            int i = 1;
-            for (String ID : tempList.keySet()) {
-                System.out.println(i++ + ". " + ID);
+        int i = 1;
+        for (String ID : tempList.keySet()) {
+            System.out.println(i++ + ". " + ID);
+        }
+        String ID;
+        while (true) {
+            System.out.print("\nCUSTOMER ID : ");
+            ID = InputVerification.getID();
+            if (tempList.containsKey(ID)) {
+                break;
             }
-            String ID;
-            while (true) {
-                System.out.println("Enter the ID: ");
-                ID = InputVerification.getID();
-                if (tempList.containsKey(ID)) {
-                    break;
-                }
-                System.out.println("No such ID found");
+            System.out.println("ID NOT FOUND");
+        }
+        int ii = 1;
+        for (String orderID : tempList.get(ID).keySet()) {
+            System.out.println(ii++ + ". " + orderID + (tempList.get(ID).get(orderID).isStatus() ? " -> PROCESSED" : ""));
+        }
+        String orderID;
+        while (true) {
+            System.out.print("\nORDER ID : ");
+            orderID = InputVerification.getID();
+            if (tempList.get(ID).containsKey(orderID)) {
+                break;
             }
-            int ii = 1;
-            for (String orderID : tempList.get(ID).keySet()) {
-                System.out.println(ii++ + ". " + orderID);
-            }
-            System.out.println("Enter the ID: ");
-            String orderID = InputVerification.getID();
-            if (!tempList.get(ID).containsKey(orderID)) {
-                System.out.println("No such ID found");
-                continue;
-            }
-            System.out.println("ORDER DETAILS:" +
-                    "\nCUSTOMER ID : " + tempList.get(ID) +
-                    "\nORDER       : ");
-            for (IndividualDetails temp : tempList.get(ID).get(orderID).getOrder().getDetails()) {
-                System.out.println(temp.getProductID() + " - " + temp.getQuantity());
-            }
+            System.out.println("ID NOT FOUND");
+        }
+        System.out.println("\nCUSTOMER ID : " + ID +
+                "\nORDER ID : " + orderID +
+                "\nORDER DETAILS : ");
+        if (tempList.get(ID).get(orderID).isStatus()) {
+            System.out.println("STATUS : PROCESSED");
+            return;
+        }
+        for (IndividualDetails temp : tempList.get(ID).get(orderID).getOrder().getDetails()) {
+            System.out.println(temp.getProductID() + " - " + temp.getQuantity());
+        }
 
-            if (tempList.get(ID).get(orderID).isStatus()) {
-                System.out.println("This order has already been processed");
-                continue;
+        System.out.print("DO YOU WANT TO INITIATE THE PROCESS [y/n] -> ");
+        if (InputVerification.yesOrNoCheck()) {
+            if (!inventoryManager.processOrder(ID, orderID, tempList.get(ID).get(orderID).getOrder())) {
+                System.out.println("QUANTITY IS INSUFFICIENT IN STORAGE. WAIT FOR THE MANUFACTURING DEPARTMENT TO COMPLETE THE PRODUCTION\n");
             }
-
-            System.out.println("DO YOU WANT TO INITIATE THE PROCESS [y/n] -> ");
-            if (InputVerification.yesOrNoCheck()) {
-                if (inventoryManager.processOrder(ID, orderID, tempList.get(ID).get(orderID).getOrder())) {
-                    break;
-                }
-                System.out.println("Quantity is insufficient in storage. Wait for the manufacturers to complete the production");
-            }
-            System.out.println("enter 1 to continue or enter 2 to exit");
-            check = InputVerification.getOption(2);
         }
     }
 
@@ -157,13 +151,13 @@ public class InventoryManagerUI implements UIManagable {
         HashMap<String, Integer> tempList = inventoryManager.getInventoryDetails();
 
         if (tempList.isEmpty()) {
-            System.out.println("No products in inventory to propose requirement");
+            System.out.println("\nADD PRODUCTS TO START");
             return;
         }
-        System.out.println("Inventory Details for your reference");
+        System.out.println("\nINVENTORY DETAILS FOR YOUR REFERENCE ");
         System.out.println("PRODUCT_ID    QUANTITY_AVAILABLE");
         for (String productID : tempList.keySet()) {
-            System.out.println(" " + productID + "          " + tempList.get(productID));
+            System.out.println(" " + productID + "             " + tempList.get(productID));
         }
         String check = "1";
         while (check.equals("1")) {
@@ -175,13 +169,13 @@ public class InventoryManagerUI implements UIManagable {
                 if (tempList.containsKey(productID)) {
                     break;
                 }
-                System.out.println("ID not found");
+                System.out.println("ID NOT FOUND");
             }
             while (true) {
                 System.out.print("QUANTITY : ");
                 quantity = InputVerification.getInt();
                 if ((quantity < 0) || (quantity > 5000)) {
-                    System.out.println("Provide optimum quantity");
+                    System.out.println("\nPROVIDE OPTIMUM QUANTITY\n");
                     continue;
                 }
                 break;
@@ -191,7 +185,7 @@ public class InventoryManagerUI implements UIManagable {
             } else {
                 requirementProposal.put(productID, requirementProposal.get(productID) + quantity);
             }
-            System.out.println("If you still want to add new products enter 1 or enter 2 to exit");
+            System.out.println("\nENTER 1 TO CONTINUE OR 2 TO EXIT");
             check = InputVerification.getOption(2);
 
             if (check.equals("2")) {

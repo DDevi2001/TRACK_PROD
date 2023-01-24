@@ -79,16 +79,16 @@ final class Database {
         }
     }
 
-    void addToInventory(HashMap<String, Inventory> manufacturedProductsList) {
-        for (Map.Entry<String, Inventory> map : manufacturedProductsList.entrySet()) {
+    void addToInventory(HashMap<String, Inventory> manufacturedProducts) {
+        for (Map.Entry<String, Inventory> map : manufacturedProducts.entrySet()) {
             if (!inventoryData.containsKey(map.getKey())) {
                 inventoryData.put(map.getKey(), map.getValue());
             } else {
                 inventoryData.get(map.getKey()).addQuantity(map.getValue().getQuantity());
             }
         }
+        refreshRequirementList(manufacturedProducts);
         this.manufacturedProductsList.clear();
-        refreshRequirementList(manufacturedProductsList);
     }
 
     private void refreshRequirementList(HashMap<String, Inventory> manufacturedProductsList) {

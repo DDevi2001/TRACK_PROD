@@ -28,13 +28,14 @@ public class CustomerUI implements UIManagable {
                 case REQUEST_QUOTATION:
                     requestQuotation();
                     continue;
-                case VIEW_QUOTATOION:
+                case VIEW_QUOTATION:
                     viewQuotation();
                     continue;
                 case VIEW_INVOICE:
                     viewInvoice();
                     continue;
                 case EXIT:
+                    System.out.println();
                     break main;
             }
         }
@@ -45,21 +46,19 @@ public class CustomerUI implements UIManagable {
         HashMap<String, String> productDetails = customer.getProductDetails();
 
         if (productDetails.isEmpty()) {
-            System.out.println("\nThere are no products to purchase. Please visit later\n");
+            System.out.println("\nNO PRODUCTS TO PURCHASE. PLEASE VISIT US LATER\n");
             return;
         }
 
         if (customer.isRequestPresent()) {
-            System.out.println("You have already posted an request. Kindly wait until the entire process gets complete.");
+            System.out.println("\nALREADY POSTED AN REQUEST. WAIT FOR THE PROCESS TO COMPLETE");
             return;
         }
 
-        System.out.println("PRODUCTS AVAILABLE");
+        System.out.println("\nPRODUCTS AVAILABLE");
         for (Map.Entry<String, String> map : productDetails.entrySet()) {
             System.out.println(map.getKey() + " - " + map.getValue());
         }
-
-        System.out.println("\nStart giving your inputs...");
         String check = "1";
         String productID;
         int quantity;
@@ -70,20 +69,20 @@ public class CustomerUI implements UIManagable {
                 if (productDetails.containsKey(productID)) {
                     break;
                 }
-                System.out.println("ID not found");
+                System.out.println("ID NOT FOUND");
             }
             while (true) {
                 System.out.print("QUANTITY : ");
                 quantity = InputVerification.getInt();
                 if ((quantity < 0) || (quantity > 5000)) {
-                    System.out.println("Provide optimum quantity");
+                    System.out.println("PROVIDE OPTIMUM QUANTITY");
                     continue;
                 }
                 break;
             }
             quotationRequest.put(productID, quantity);
 
-            System.out.println("\nIf you still want to add new products enter 1 or enter 2 to exit");
+            System.out.println("\nENTER 1 TO CONTINUE OR 2 TO EXIT");
             check = InputVerification.getOption(2);
             if (check.equals("2")) {
                 customer.requestQuotation(quotationRequest);
@@ -96,11 +95,11 @@ public class CustomerUI implements UIManagable {
         Quotation quotation = customer.getQuotation();
 
         if (!customer.isRequestPresent()) {
-            System.out.println("Yet to start your journey...");
+            System.out.println("\nYET TO START YOUR JOURNEY");
             return;
         }
         if (quotation == null) {
-            System.out.println("Your quotation is yet to be processed");
+            System.out.println("\nYET TO PROCESS YOUR REQUEST");
             return;
         }
 
@@ -115,9 +114,9 @@ public class CustomerUI implements UIManagable {
         }
         fmt.format("____________________________________________________________________________________________________________________________________________");
         System.out.println(fmt);
-
-        System.out.print("DO YOU WANT TO CONFIRM THE ORDER? [y/n] -> ");
         System.out.println("NOTE: ONCE CONFIRMED YOU CANNOT CANCEL THE ORDER AND NON-AVAILABLE PRODUCTS WILL BE AUTOMATICALLY CANCELLED FROM YOUR ORDER");
+        System.out.print("DO YOU WANT TO CONFIRM THE ORDER? [y/n] -> ");
+
         if (InputVerification.yesOrNoCheck()) {
             customer.confirmOrder();
             return;
@@ -127,12 +126,12 @@ public class CustomerUI implements UIManagable {
 
     void viewInvoice() {
         if (!customer.isOrderPresent()) {
-            System.out.println("You haven't placed any orders");
+            System.out.println("\nNO ORDERS");
             return;
         }
         HashMap<String, Invoice> invoice = customer.getInvoice();
         if (invoice == null) {
-            System.out.println("Your order is yet to be confirmed from our side");
+            System.out.println("YET TO PROCESS THE ORDER");
             return;
         }
         String check = "1";
@@ -141,10 +140,10 @@ public class CustomerUI implements UIManagable {
             for (Invoice invoiceList : invoice.values()) {
                 System.out.println(i++ + ". " + invoiceList.getOrder().getOrderID());
             }
-            System.out.println("Enter the ID: ");
+            System.out.println("ORDER ID : ");
             String ID = InputVerification.getID();
             if (!invoice.containsKey(ID)) {
-                System.out.println("No such ID found");
+                System.out.println("ID NOT FOUND");
                 continue;
             }
             System.out.println("ORDER ID : " + invoice.get(ID));
@@ -167,7 +166,7 @@ public class CustomerUI implements UIManagable {
             fmt.format("__________________________________________________________________________________________________________________________________________");
             System.out.println(fmt);
 
-            System.out.println("enter 1 to continue or enter 2 to exit");
+            System.out.println("ENTER 1 TO CONTINUE OR 2 TO EXIT");
             check = InputVerification.getOption(2);
         }
     }
