@@ -105,8 +105,9 @@ public class SalesHeadUI implements UIManagable {
             System.out.print("DO YOU WANT TO PROCESS THE QUOTATION [y/n] -> ");
             if (InputVerification.yesOrNoCheck()) {
                 salesHead.processQuotation(customerID, tempList.get(customerID));
-                break;
+                tempList.remove(customerID);
             }
+            break;
         }
         System.out.println("SUCCESSFULLY PROCESSED");
     }

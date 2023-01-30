@@ -146,7 +146,7 @@ public class CustomerUI implements UIManagable {
                 System.out.println("ID NOT FOUND");
                 continue;
             }
-            System.out.println("ORDER ID : " + invoice.get(ID));
+            System.out.println("ORDER ID : " + ID);
             if (invoice.get(ID).isStatus()) {
                 System.out.println("STATUS : Processing started");
             } else {

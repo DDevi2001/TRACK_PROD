@@ -6,7 +6,6 @@ import model.IndividualDetails;
 import model.Inventory;
 import Users.InventoryManager;
 import model.Invoice;
-import model.Order;
 import ui.functions.InventoryFunctions;
 
 import java.util.HashMap;
@@ -142,6 +141,8 @@ public class InventoryManagerUI implements UIManagable {
         if (InputVerification.yesOrNoCheck()) {
             if (!inventoryManager.processOrder(ID, orderID, tempList.get(ID).get(orderID).getOrder())) {
                 System.out.println("QUANTITY IS INSUFFICIENT IN STORAGE. WAIT FOR THE MANUFACTURING DEPARTMENT TO COMPLETE THE PRODUCTION\n");
+            } else {
+                System.out.println("ORDER PROCESSED SUCCESSFULLY");
             }
         }
     }

@@ -1,7 +1,7 @@
 package datas;
 
 public class ControllerFactory {
-    public static <T, U> T getController(Class<T> clazz) throws ClassCastException {
+    public static <T> T getController(Class<T> clazz) throws ClassCastException {
         Object manager = new DataManager();
         if (clazz.isInstance(manager)) {
             return clazz.cast(manager);
