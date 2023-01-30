@@ -42,7 +42,6 @@ public class ManufacturerUI implements UIManagable {
                                 manufactureProduct();
                                 continue;
                             default:
-                                System.out.println();
                                 break main1;
                         }
                     }
@@ -125,7 +124,7 @@ public class ManufacturerUI implements UIManagable {
             //Get manufacturing cost for the product
             float manufacturingCost;
             while (true) {
-                System.out.print("MANUFACTURING COST(of one) " + newProduct + ": ");
+                System.out.print("MANUFACTURING COST(of one) : ");
                 manufacturingCost = InputVerification.getFloat();
                 if ((manufacturingCost >= 10) && (manufacturingCost <= 1000000)) {
                     break;
@@ -136,7 +135,7 @@ public class ManufacturerUI implements UIManagable {
             //Get weight of the product
             float productWeight;
             while (true) {
-                System.out.print("WEIGHT(of one) " + newProduct + "(in kg): ");
+                System.out.print("WEIGHT(of one)(in kg) : ");
                 productWeight = InputVerification.getFloat();
                 if (productWeight > 0.01 && productWeight < 1000) {
                     break;

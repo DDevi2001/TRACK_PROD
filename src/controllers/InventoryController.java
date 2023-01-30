@@ -1,4 +1,4 @@
-package datas.controllers;
+package controllers;
 
 import model.Inventory;
 import model.Invoice;

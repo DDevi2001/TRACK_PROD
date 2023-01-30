@@ -9,7 +9,9 @@ public class MainApp {
         ApplicationUI applicationUI = new ApplicationUI();
         main:
         while (true) {
-            System.out.println("WELCOME TO TRACK-PROD");
+            System.out.println("\n_________________________________________________________________________________________________________________________________________________________________________________________");
+            System.out.println("                                                                                   TRACK-PROD");
+            System.out.println("_________________________________________________________________________________________________________________________________________________________________________________________");
             MainFunctions[] mainFunctions = MainFunctions.values();
             Utils.printOptions(mainFunctions);
             MainFunctions preference = mainFunctions[Integer.parseInt(InputVerification.getOption(mainFunctions.length)) - 1];

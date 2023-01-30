@@ -1,14 +1,14 @@
 package Users;
 
 import datas.ControllerFactory;
-import datas.controllers.ManufacturerController;
+import controllers.ManufacturerController;
 import model.Inventory;
 
 import java.util.HashMap;
 
 public class Manufacturer extends User {
 
-    ManufacturerController manufacturerController;
+    private final ManufacturerController manufacturerController;
     public Manufacturer(String id, String role) {
         super(id, role);
         this.manufacturerController = ControllerFactory.getController(ManufacturerController.class);

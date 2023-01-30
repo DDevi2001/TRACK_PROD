@@ -1,8 +1,5 @@
 package model;
 
-import datas.ControllerFactory;
-import datas.controllers.InventoryController;
-
 public class IndividualDetails {
     String productID;
     String productName;

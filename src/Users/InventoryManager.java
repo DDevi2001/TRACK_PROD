@@ -1,7 +1,7 @@
 package Users;
 
 import datas.ControllerFactory;
-import datas.controllers.InventoryController;
+import controllers.InventoryController;
 import model.Inventory;
 import model.Invoice;
 import model.Order;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class InventoryManager extends User {
 
-    InventoryController inventoryController ;
+    private final InventoryController inventoryController ;
     public InventoryManager(String id, String role) {
         super(id, role);
         this.inventoryController = ControllerFactory.getController(InventoryController.class);

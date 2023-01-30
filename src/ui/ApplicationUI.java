@@ -1,7 +1,7 @@
 package ui;
 
 import datas.ControllerFactory;
-import datas.controllers.AdminController;
+import controllers.AdminController;
 import helper.InputVerification;
 import helper.Utils;
 import Users.Customer;
@@ -59,34 +59,10 @@ public class ApplicationUI {
     }
 
     public void signUP() {
-        System.out.println("Enter your name: ");
+        System.out.print("NAME : ");
         String name = InputVerification.getString();
         String id = Utils.generateID("Customer");
-        System.out.println("Your id is " + id + ". Please remember it for future use");
+        System.out.println("YOUR ID : " + id + "\nREMEMBER IT FOR FUTURE USE");
         adminController.addUser(id, "customer");
     }
-
-//    public void enterInventoryManagerUI(InventoryManager inventoryManager) {
-//        InventoryManagerUI inventoryManagerUI = new InventoryManagerUI(inventoryManager);
-//        inventoryManagerUI.receiveInventoryController(new DataManager());
-//        inventoryManagerUI.showFunctions();
-//    }
-//
-//    public void enterManufacturerUI(Manufacturer manufacturer) {
-//        ManufacturerUI manufacturerUI = new ManufacturerUI(manufacturer);
-//        manufacturerUI.receiveManufacturerController(new DataManager());
-//        manufacturerUI.showFunctions();
-//    }
-//
-//    public void enterSalesUI(SalesHead salesHead) {
-//        SalesHeadUI salesHeadUI = new SalesHeadUI(salesHead);
-//        salesHeadUI.receiveSalesController(new DataManager());
-//        salesHeadUI.showFunctions();
-//    }
-//
-//    public void enterCustomerUI(Customer customer) {
-//        CustomerUI customerUI = new CustomerUI(customer);
-//        customerUI.receiveCustomerController(new DataManager());
-//        customerUI.showFunctions();
-//    }
 }

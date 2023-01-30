@@ -1,6 +1,6 @@
 package datas;
 
-import datas.controllers.*;
+import controllers.*;
 import model.*;
 import Users.User;
 

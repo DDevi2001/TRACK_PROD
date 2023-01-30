@@ -1,15 +1,14 @@
 package Users;
 
 import datas.ControllerFactory;
-import datas.controllers.CustomerController;
+import controllers.CustomerController;
 import model.Invoice;
 import model.Quotation;
 
 import java.util.HashMap;
 
 public class Customer extends User{
-    public static int count = 0;
-    private CustomerController customerController;
+    private final CustomerController customerController;
 
     public Customer (String id, String role) {
         super(id, role);
